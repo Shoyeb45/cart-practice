@@ -1,8 +1,10 @@
-import { asyncHandler } from "../utils/asyncHandler"
-import { User } from "../models/user.model";
+import { asyncHandler } from "../utils/asyncHandler.js"
+import { User } from "../models/user.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler( async (req, res) => {
-    // console.log(req);
+    console.log(req);
 
     // 1. Getting user detail
     const {username, email, password, fullname} = req.body;
@@ -47,7 +49,46 @@ const registerUser = asyncHandler( async (req, res) => {
     return res.status(201).json(new ApiResponse(200, isUserCreated, "User registered succefully"));  
 }); 
 
+const loginUser = asyncHandler ( async (req, res) => {
+    // 1. get the data
+    // console.log(req.query);
+    
+    const { username, password } = req.body;
+    console.log(username);
+    
+    if (!username) {
+        throw new ApiError(400, "Username is required.");
+    }
+    // 2. check the user
+    const user = await User.findOne({username});
+
+    if (!user) {
+        throw new ApiError(404, "User does not exist");
+    }
+
+    const isPasswordCorrect = await user.isPasswordCorrect(password);
+    if (!isPasswordCorrect) {
+        throw new ApiError(401, "Password is incorrect");
+    }
+
+    // Update tokens
+    const loggedInUser = await User.findById(user._id).select("-password");
+    
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200, 
+            {
+                user: loggedInUser
+            },
+            "User logged In Successfully"
+        )
+    )
+});
+
 
 export {
-    registerUser
+    registerUser,
+    loginUser
 };
