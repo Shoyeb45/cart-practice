@@ -23,7 +23,8 @@ const userSchema = mongoose.Schema({
         type: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Product"
-        }
+        },
+        default: {}
     }
 }, {timestamps: true});
 
