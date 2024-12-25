@@ -7,4 +7,11 @@ const categorySchema = mongoose.Schema({
     }
 }, {timestamps: true});
 
+
+export const createCategory = async function(cate) {
+    return (await Category.create({
+        category: cate
+    }));
+}
+
 export const Category = mongoose.model("Category", categorySchema);

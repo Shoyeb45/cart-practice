@@ -30,4 +30,16 @@ const productSchema = mongoose.Schema({
 
 }, {timestamps: true});
 
+export const createCategory = async function(data) {
+
+    return (await Product.create({
+        category: data.category,
+        price: data.price,
+        description: data.description,
+        productImage: data.productImage,
+        quantity: data.quantity,
+        productName: data.productName
+    }));
+}
+
 export const Product = mongoose.model("Product", productSchema);
