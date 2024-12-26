@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register as a new User</title>
+    
+    <link rel="stylesheet" href="./../..//node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./../../node_modules/bootstrap/dist/css/bootstrap.css">
+
+    <style>
+        .invalid-feedback {
+            display: none;
+        }
+
+        .form-control:invalid ~ .invalid-feedback {
+            display: block;
+        }
+
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 0.9rem;
+        }
+
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- <form novalidate method="POST" action="http://localhost:8000/api/v1/user/register"> -->
+        <form novalidate>
+            <h2 class="text-center mb-4" >Create an Account</h2>
+
+            <div class="form-group">
+                <label for="fullname">Full Name</label>
+                <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Enter your full name" required>
+                <!-- <div class="invalid-feedback">
+                    Please enter your name.
+                </div> -->
+            </div>
+            <div class="form-group">
+                <label for="username">User Name</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Select your username" required>
+                <!-- <div class="invalid-feedback">
+                    Please enter your name.
+                </div> -->
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                <div class="invalid-feedback">
+                    Please enter a valid email address.
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your Password" required>
+                <div class="invalid-feedback">
+                    Please provide a password.
+                </div>
+            </div>
+
+            <!-- <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
+                <label class="form-check-label" for="terms">I agree to the terms and conditions</label>
+                <div class="invalid-feedback">
+                    You must agree to the terms and conditions before submitting.
+                </div>
+            </div> -->
+
+            <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+            <hr>
+
+            <p class="text-center">or register with</p>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-danger mr-2">
+                    <i class="bi bi-google"></i> Google
+                </button>
+                <button type="button" class="btn btn-dark">
+                    <i class="bi bi-apple"></i> Apple
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <script >
+    document.getElementById('registerForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    console.log('Form submission triggered');
+
+    const form = event.target;
+    const formData = new FormData(form);
+
+    const userDetails = {
+        fullname: formData.get('fullname'),
+        username: formData.get('username'),
+        email: formData.get('email'),
+        password: formData.get('password'),
+    };
+
+    console.log('User details:', userDetails);
+
+    try {
+        const response = await fetch('http://localhost:8000/api/v1/user/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userDetails),
+        });
+
+        console.log('Response status:', response.status);
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Something went wrong.');
+        }
+
+        console.log('Success:', data);
+        alert('User registered successfully!');
+    } catch (error) {
+        console.error('Error occurred:', error.message);
+        alert(`Error: ${error.message}`);
+    }
+});
+
+    </script>
+</body>
+</html>

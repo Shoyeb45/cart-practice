@@ -4,11 +4,14 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 const registerUser = asyncHandler( async (req, res) => {
-    console.log(req);
-
+    // console.log(req);
+    
     // 1. Getting user detail
-    const {username, email, password, fullname} = req.body;
-
+    let {username, email, password, fullname} = req.body;
+    console.log(username.toLowerCase());
+    
+    username = username.toLowerCase();
+    // console.log("yah");
     
     // 2. Data validation
     if (
@@ -16,15 +19,15 @@ const registerUser = asyncHandler( async (req, res) => {
     ) {
         throw new ApiError(400, "All fields are required");
     }
-
+    
     // 3. check if user already exists
     const existedUser = await User.findOne({
         $or: [{ username }, { email }]
     })
-
-
+    
+    
     if (existedUser) {
-        throw new ApiError(409, "User with email or username already exist");
+        res.status(409).send("Username already exist");
     }
     
     // Upload data in schema
@@ -32,21 +35,24 @@ const registerUser = asyncHandler( async (req, res) => {
         fullname,
         email,
         password,
-        username: username.toLowerCase()
+        username
     });
-
+    
     // Check if the user is really selected
     const isUserCreated = await User.findById(user._id).select(
         "-password" // give the column name which we need to exclude by -Column1 -column2 ....
     );
-
+    
     // If something went wrong, it's our mistake so, error code should be from server side 
     if (!isUserCreated) {
-        throw new ApiError("500", "Something went wrong from our side while registering, please try once more.");
+        res.status(500).send("Something went wrong from our side while registering, please try once more.");
+        // throw new ApiError("500", "Something went wrong from our side while registering, please try once more.");
     }
 
+    req.flash("success", "You are now registered");
     // Send response using our ApiResponse class
-    return res.status(201).json(new ApiResponse(200, isUserCreated, "User registered succefully"));  
+    // return res.status(201).json(new ApiResponse(200, isUserCreated, "User registered succefully"));
+    return res.status(201).send("successfully login");  
 }); 
 
 const loginUser = asyncHandler ( async (req, res) => {
