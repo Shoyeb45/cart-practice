@@ -20,11 +20,12 @@ const userSchema = mongoose.Schema({
         required: true
     },
     cart: {
-        type: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product"
-        },
-        default: {}
+        type: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "Product"
+            }
+        ],
     }
 }, {timestamps: true});
 

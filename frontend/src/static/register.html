@@ -30,8 +30,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- <form novalidate method="POST" action="http://localhost:8000/api/v1/user/register"> -->
-        <form novalidate>
+        <!-- <form novalidate id="registerForm" action="http://localhost:8000/api/v1/user/register" method="POST"> -->
+        <form novalidate id="register-form">
             <h2 class="text-center mb-4" >Create an Account</h2>
 
             <div class="form-group">
@@ -88,47 +88,6 @@
         </form>
     </div>
 
-    <script >
-    document.getElementById('registerForm').addEventListener('submit', async function (event) {
-    event.preventDefault();
-
-    console.log('Form submission triggered');
-
-    const form = event.target;
-    const formData = new FormData(form);
-
-    const userDetails = {
-        fullname: formData.get('fullname'),
-        username: formData.get('username'),
-        email: formData.get('email'),
-        password: formData.get('password'),
-    };
-
-    console.log('User details:', userDetails);
-
-    try {
-        const response = await fetch('http://localhost:8000/api/v1/user/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userDetails),
-        });
-
-        console.log('Response status:', response.status);
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error || 'Something went wrong.');
-        }
-
-        console.log('Success:', data);
-        alert('User registered successfully!');
-    } catch (error) {
-        console.error('Error occurred:', error.message);
-        alert(`Error: ${error.message}`);
-    }
-});
-
-    </script>
+    <script src="./../js/register.js"></script>
 </body>
 </html>

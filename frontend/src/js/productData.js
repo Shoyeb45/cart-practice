@@ -1,17 +1,15 @@
-function getProductData() {
-    fetch("http://localhost:8000/api/v1/product/getProduct")
-        .then((product) => {
-            return product.json()
-        })  
-        .then((product) => {
-            console.log(product);
-        })
-        .catch((err) => {
-            console.log(err?.message);
-        }
-    )
+async function getProductData() {
+    try {
+        const response = await fetch("http://localhost:8000/api/v1/product/getProduct");
+        const product = await response.json();
+        
+        console.log(product);
+        const cards = document.querySelector("div");
+        
+    } catch (err) {
+        console.log(err?.message);
+    }
 }
 
+getProductData();
 
-const productData = getProductData();
-console.log(productData);

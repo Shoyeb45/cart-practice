@@ -2,9 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { Product } from "./../models/product.model.js";
 
 const getProduct = asyncHandler ( async (req, res) => {
-    try {
-        console.log("ga");
-        
+    try {        
         const products = await Product.find(); // Fetch all products
         res.status(200).json(products);
     } catch (error) {
